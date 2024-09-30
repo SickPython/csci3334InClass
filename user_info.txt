@@ -1,0 +1,3 @@
+Make: Mazda
+Model: CX-3
+Year: 2022

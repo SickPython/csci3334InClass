@@ -1,0 +1,6 @@
+[package]
+name = "inClassCsci3334"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
