@@ -1,69 +1,53 @@
 use std::fs::File;
 use std::io::{self, Read, Write};
-
-struct Car {
-    make: String,
-    model: String,
-    year: u32,
+#[derive(Debug)]
+enum GradeLevel {
+    Bachelor,
+    Master,
+    PhD,
+}
+#[derive(Debug)]
+enum Major {
+    ComputerScience,
+    ElectricalEngineering,
+}
+#[derive(Debug)]
+struct Student {
+    name:String,
+    grade:GradeLevel,
+    major:Major
 }
 
-fn main() -> io::Result<()> {
-    let car = reading_from_console();
-    
-    save_car_info_to_file(&car)?;
-    
-    let content = read_car_info_from_file()?;
-    println!("Car Information from file:\n{}", content);
-    
-    Ok(())
-}
+impl Student {
+    fn new(name:String,grade:GradeLevel,major:Major) -> Self {
+        Student {
+            name:name,
+            grade:grade,
+            major:major,
+        }
+    }
 
-fn reading_from_console() -> Car {
-    let mut buffer = String::new();
+    fn introduce_yourself(&self) {let grade = match self.grade {
+        GradeLevel::Bachelor => "Bachelor",
+        GradeLevel::Master => "Master",
+        GradeLevel::PhD => "PhD",
+    };
 
-    // Get the make of the car
-    print!("What is the make of your car? ");
-    io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut buffer).unwrap();
-    let make = buffer.trim().to_string();
-    buffer.clear();
+    let major = match self.major {
+        Major::ComputerScience => "Computer Science",
+        Major::ElectricalEngineering => "Electrical Engineering",
+    };
 
-    // Get the model of the car
-    print!("What is the model of your car? ");
-    io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut buffer).unwrap();
-    let model = buffer.trim().to_string();
-    buffer.clear();
-
-    // Get the year of the car
-    print!("What is the year of your car? ");
-    io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut buffer).unwrap();
-    let year: u32 = buffer.trim().parse().expect("Please enter a valid number");
-    buffer.clear();
-
-    // Create and return the Car struct
-    let car = Car { make, model, year };
     println!(
-        "Your car is a {} {} from the year {}.",
-        car.make, car.model, car.year
+        "Hello, my name is {}. I am a {} student majoring in {}.",
+        self.name, grade, major
     );
+        }
+    }
 
-    car
-}
-
-// Function to save the car struct into a file
-fn save_car_info_to_file(car: &Car) -> io::Result<()> {
-    let mut file = File::create("user_info.txt")?;
-    let car_info = format!("Make: {}\nModel: {}\nYear: {}\n", car.make, car.model, car.year);
-    file.write_all(car_info.as_bytes())?;
-    Ok(())
-}
-
-// Function to read the file and return its content
-fn read_car_info_from_file() -> io::Result<String> {
-    let mut file = File::open("user_info.txt")?;
-    let mut content = String::new();
-    file.read_to_string(&mut content)?;
-    Ok(content)
+fn main() {
+    let s1 = Student::new("Juan Carlos".to_string(),
+    GradeLevel::Bachelor,
+    Major::ComputerScience);
+s1.introduce_yourself();
 }
